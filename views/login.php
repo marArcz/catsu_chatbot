@@ -41,7 +41,7 @@ if(Session::getUser($pdo)){
                             <p class="form-text">Please enter your credentials to continue</p>
                             <hr>
                             <div class="mb-3">
-                                <label for="" class="form-label">Student ID No:</label>
+                                <label for="" class="form-label fw-bold">Student ID No:</label>
                                 <input type="text" name="student_id_no" required value="<?= isset($_POST['submit'])? $_POST['student_id_no']:'' ?>" class="form-control" placeholder="eg. 2020-1234">
 
                                 <?php if (isset($student_id_error)) : ?>
@@ -52,7 +52,7 @@ if(Session::getUser($pdo)){
 
                             </div>
                             <div class="mb-3">
-                                <label for="" class="form-label">Password:</label>
+                                <label for="" class="form-label fw-bold">Password:</label>
                                 <input type="password" name="password" required class="form-control" value="<?= isset($_POST['submit'])? $_POST['password']:'' ?>" placeholder="Enter your password">
 
                                 <?php if (isset($password_error)) : ?>

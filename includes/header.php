@@ -1,6 +1,5 @@
 <!-- Stylesheets -->
-<link rel="stylesheet" href="../assets/uicons-regular-rounded/css/uicons-regular-rounded.css">
-<link rel="stylesheet" href="../assets/uicons/css/uicons-regular-rounded.css">
+<link rel='stylesheet' href='https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css'>
 <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="../assets/styles/css/custom.css">
 <link rel="stylesheet" href="../assets/styles/css/app.css">
