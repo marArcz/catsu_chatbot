@@ -70,13 +70,23 @@ if ($student == null) {
                                 </div>
                             </div>
                             <div class="card-body chatbox-container bg-light">
-                                <div class="chatbox">
+                                <div id="chatbox" class="chatbox">
                                     <div class="chat-item user">
-                                        <div class="chat text-dark-blue">
-                                            Hello
+                                        <div class="text-dark-blue">
+                                            <p class="chat">Hello</p>
                                         </div>
                                         <div class="avatar">
-                                            <i class="fi fi-rr-circle-user fs-5"></i>
+                                            <i class="bi bi-person-fill fs-5"></i>
+                                        </div>
+                                    </div>
+                                    <div class="chat-item">
+                                        <div class="avatar">
+                                            <img src="../assets/images/Blink-bot-sm.gif" />
+                                        </div>
+                                        <div class="text-dark-blue">
+                                            <p class="chat">
+                                                How can I help you?
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -100,10 +110,12 @@ if ($student == null) {
                             </div>
                             <div class="card-footer py-3 bg-light">
                                 <div class="chat-input-container">
-                                    <input type="text" placeholder="Write message" class="form-control chat-input border-0 me-2 shadow-sm rounded-4" name="chat" required >
-                                    <button class="btn btn-white border-0 d-flex align-items-center">
-                                        <i class="fi fi-rr-paper-plane fs-5 leading-none"></i>
-                                    </button>
+                                    <form action="" id="chat-form">
+                                        <input id="chat-input" type="text" placeholder="Write message" class="form-control chat-input border-0 me-2 shadow-sm rounded-4" name="chat" required>
+                                        <button type="submit" class="btn btn-white border-0 d-flex align-items-center">
+                                            <i class="fi fi-rr-paper-plane fs-5 leading-none"></i>
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -116,6 +128,82 @@ if ($student == null) {
     <!-- js scripts -->
     <?php require_once '../includes/scripts.php' ?>
     <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
+    <script>
+        const sendQuery = (query) => {
+            const addQuery = (q) => {
+                $("#chatbox").append(
+                    `<div class="chat-item user">
+                        <div class="text-dark-blue">
+                            <p class="chat">${q}</p>
+                        </div>
+                        <div class="avatar">
+                            <i class="bi bi-person-fill fs-5"></i>
+                        </div>
+                    </div>`
+                )
+                .append(`
+                <div class="chat-item chatbot-typing">
+                    <div class="avatar">
+                        <img src="../assets/images/Blink-bot-sm.gif" />
+                    </div>
+                    <div class="text-dark-blue">
+                        <p class="chat">
+                            ...
+                        </p>
+                    </div>
+                </div>
+                `)
+
+                setTimeout(()=> addResponse("Sorry I can't understand you!"),2000);
+                    
+            }
+            const addResponse = (response) => {
+                
+                $('.chatbot-typing').remove();
+                
+                $("#chatbox")
+                .append(
+                    `<div class="chat-item">
+                        <div class="avatar">
+                            <img src="../assets/images/Blink-bot-sm.gif" />
+                        </div>
+                        <div class="text-dark-blue">
+                            <p class="chat">
+                                ${response}
+                            </p>
+                        </div>
+                    </div>
+                    `
+                );
+            }
+
+            addQuery(query);
+            $("#chatbox").append(`
+            
+            `)
+            $.ajax({
+                method: 'post',
+                url: '../app/generate_response.php',
+                data: {
+                    query
+                },
+                dataType: 'json',
+                success: function(res) {
+                    addResponse(res);
+                }
+            })
+        }
+
+        $(function() {
+            $("#chat-form").on('submit', function(e) {
+                e.preventDefault();
+                let query = $("#chat-input").val();
+                sendQuery(query);
+
+                $("#chat-input").val('');
+            })
+        })
+    </script>
 </body>
 
 </html>

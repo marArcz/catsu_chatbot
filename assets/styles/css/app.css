@@ -45,6 +45,7 @@ body {
   box-sizing: border-box;
   padding-left: 10px;
   padding-right: 10px;
+  overflow: auto;
 }
 @media screen and (max-width: 768px) {
   .card-chatbox .chatbox {
@@ -70,6 +71,13 @@ body {
 .card-chatbox .chatbox .chat-item.user .avatar {
   align-self: flex-end;
   margin: 0;
+}
+.card-chatbox .chatbox .chat-item .avatar {
+  align-items: baseline;
+}
+.card-chatbox .chatbox .chat-item .avatar img {
+  width: 30px;
+  height: 30px;
 }
 .card-chatbox .chat-input-container {
   position: relative;

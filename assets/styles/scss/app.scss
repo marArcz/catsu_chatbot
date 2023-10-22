@@ -47,6 +47,7 @@ body{
         box-sizing: border-box;
         padding-left: 10px;
         padding-right: 10px;
+        overflow:auto;
         @media screen and (max-width:768px) {
             height: 42vh;
         }
@@ -64,11 +65,17 @@ body{
             }
             &.user{
                 margin-left: auto;
-                
                 .avatar{
                     align-self: flex-end;
                     margin: 0;
+                }
+            }
 
+            .avatar{
+                align-items: baseline;
+                img{
+                    width: 30px;
+                    height: 30px;
                 }
             }
         }
