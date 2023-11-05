@@ -40,12 +40,30 @@ body {
   border-bottom-right-radius: 1.1rem !important;
 }
 .card-chatbox .chatbox {
-  height: 50vh;
-  padding-bottom: 60px;
+  height: 47vh;
   box-sizing: border-box;
   padding-left: 10px;
   padding-right: 10px;
   overflow: auto;
+  padding-bottom: 20px !important;
+  /* Scrollbar */
+  /* width */
+  /* Track */
+  /* Handle */
+  /* Handle on hover */
+  /* end of Scrollbar */
+}
+.card-chatbox .chatbox::-webkit-scrollbar {
+  width: 2px;
+}
+.card-chatbox .chatbox::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.card-chatbox .chatbox::-webkit-scrollbar-thumb {
+  background: rgba(23, 35, 58, 0.6);
+}
+.card-chatbox .chatbox::-webkit-scrollbar-thumb:hover {
+  background: rgba(23, 35, 58, 0.3);
 }
 @media screen and (max-width: 768px) {
   .card-chatbox .chatbox {
@@ -58,12 +76,14 @@ body {
   max-width: 70% !important;
   display: flex;
   gap: 10px;
+  margin-bottom: 15px !important;
 }
 .card-chatbox .chatbox .chat-item .chat {
   border: 1px solid rgba(23, 35, 58, 0.3);
   background: white;
   padding: 10px 14px;
   border-radius: 10px;
+  line-height: 30px !important;
 }
 .card-chatbox .chatbox .chat-item.user {
   margin-left: auto;
@@ -102,9 +122,14 @@ body {
   box-sizing: border-box !important;
 }
 .card-chatbox .chatbox-container .suggestion-list {
-  position: absolute;
   bottom: 15px;
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
+}
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }/*# sourceMappingURL=app.css.map */

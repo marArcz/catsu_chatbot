@@ -4,17 +4,21 @@ $navbar-h: 10vh;
 
 .main-navbar {
     min-height: $navbar-h;
-    .navbar-nav{
+
+    .navbar-nav {
         gap: 40px !important;
+
         @media screen and (max-width:768px) {
             gap: unset !important;
         }
-        .nav-link{
+
+        .nav-link {
             font-size: 0.9rem !important;
         }
     }
 }
-body{
+
+body {
     background: rgba($color: $dark_blue, $alpha: 0.9);
 }
 
@@ -29,51 +33,82 @@ body{
 }
 
 .card-chatbox {
-    $radius:1.1rem;
+    $radius: 1.1rem;
     border-radius: $radius !important;
 
     .card-header {
         border-top-left-radius: $radius !important;
         border-top-right-radius: $radius !important;
     }
+
     .card-footer {
         border-bottom-left-radius: $radius !important;
         border-bottom-right-radius: $radius !important;
     }
 
     .chatbox {
-        height: 50vh;
-        padding-bottom: 60px;
+        height: 47vh;
         box-sizing: border-box;
         padding-left: 10px;
         padding-right: 10px;
-        overflow:auto;
+        overflow: auto;
+        padding-bottom: 20px !important;
+
+        /* Scrollbar */
+        /* width */
+        &::-webkit-scrollbar {
+            width: 2px;
+        }
+
+        /* Track */
+        &::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        /* Handle */
+        &::-webkit-scrollbar-thumb {
+            background: rgba($color: $dark_blue, $alpha: 0.6);
+        }
+
+        /* Handle on hover */
+        &::-webkit-scrollbar-thumb:hover {
+            background: rgba($color: $dark_blue, $alpha: 0.3);
+        }
+
+        /* end of Scrollbar */
+
         @media screen and (max-width:768px) {
             height: 42vh;
         }
 
-        .chat-item{
+        .chat-item {
             width: max-content;
             max-width: 70% !important;
             display: flex;
             gap: 10px;
-            .chat{
+            margin-bottom: 15px !important;
+
+            .chat {
                 border: 1px solid rgba($color: $dark_blue, $alpha: 0.3);
                 background: white;
                 padding: 10px 14px;
                 border-radius: 10px;
+                line-height: 30px !important;
             }
-            &.user{
+
+            &.user {
                 margin-left: auto;
-                .avatar{
+
+                .avatar {
                     align-self: flex-end;
                     margin: 0;
                 }
             }
 
-            .avatar{
+            .avatar {
                 align-items: baseline;
-                img{
+
+                img {
                     width: 30px;
                     height: 30px;
                 }
@@ -81,16 +116,19 @@ body{
         }
     }
 
-    .chat-input-container{
+    .chat-input-container {
         position: relative;
-        .chat-input{
+
+        .chat-input {
             padding: 20px 20px;
             transition: 300ms;
-            &:focus{
+
+            &:focus {
                 border: 1px solid rgba($color: $dark_blue, $alpha: 0.3) !important;
             }
         }
-        button{
+
+        button {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
@@ -100,18 +138,18 @@ body{
         }
     }
 
-    .chatbox-container{
+    .chatbox-container {
         position: relative;
         box-sizing: border-box !important;
-        .suggestion-list{
-            position: absolute;
+
+        .suggestion-list {
             bottom: 15px;
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
-            .btn-query{
-                
-            }
+
+            .btn-query {}
+
             // .suggestion{
             //     padding: 10px;
             //     border-radius: 10px;
@@ -121,4 +159,11 @@ body{
             // }
         }
     }
+}
+
+.login-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

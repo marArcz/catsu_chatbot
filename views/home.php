@@ -17,33 +17,8 @@ if ($student == null) {
 </head>
 
 <body class="">
-    <nav class="navbar navbar-expand-lg bg-dark-blue navbar-dark main-navbar">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center" href="#">
-                <img src="../assets/images/catsu.png" width="50" alt="">
-                <span class="ms-2">Catsu Chatbot</span>
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center">
-                    <li class="nav-item">
-                        <a class="nav-link text-uppercase fs-6 fw-bold active" aria-current="page" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-uppercase fs-6 fw-bold" href="#">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-uppercase fs-6 fw-bold" href="#">
-                            <!-- <i class="fi fi-rr-circle-user fs-5"></i> -->
-                            Profile
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <?php $current_page = "home" ?>
+    <?php require_once '../includes/navbar.php' ?>
     <main>
         <div class="home-container">
             <div class="container">
@@ -69,16 +44,8 @@ if ($student == null) {
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-body chatbox-container bg-light">
+                            <div class="card-body chatbox-container bg-light" id="chatbox-container">
                                 <div id="chatbox" class="chatbox">
-                                    <div class="chat-item user">
-                                        <div class="text-dark-blue">
-                                            <p class="chat">Hello</p>
-                                        </div>
-                                        <div class="avatar">
-                                            <i class="bi bi-person-fill fs-5"></i>
-                                        </div>
-                                    </div>
                                     <div class="chat-item">
                                         <div class="avatar">
                                             <img src="../assets/images/Blink-bot-sm.gif" />
@@ -90,7 +57,7 @@ if ($student == null) {
                                         </div>
                                     </div>
                                 </div>
-                                <div class="suggestion-list">
+                                <div class="suggestion-list ps-3" id='suggestion-list'>
                                     <button type="button" class="btn btn-outline-dark-blue btn-query rounded-pill">
                                         <p class="my-0">
                                             <small class="query">How does this work?</small>
@@ -129,9 +96,15 @@ if ($student == null) {
     <?php require_once '../includes/scripts.php' ?>
     <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
     <script>
-        const sendQuery = (query) => {
-            const addQuery = (q) => {
-                $("#chatbox").append(
+        const scrollDownChats = () => {
+            var chatBoxContainer = $("#chatbox");
+
+            chatBoxContainer.animate({
+                scrollTop: chatBoxContainer.prop("scrollHeight")
+            }, 1000);
+        }
+        const addQuery = (q) => {
+            $("#chatbox").append(
                     `<div class="chat-item user">
                         <div class="text-dark-blue">
                             <p class="chat">${q}</p>
@@ -154,42 +127,177 @@ if ($student == null) {
                 </div>
                 `)
 
-                setTimeout(()=> addResponse("Sorry I can't understand you!"),2000);
-                    
-            }
-            const addResponse = (response) => {
-                
-                $('.chatbot-typing').remove();
-                
-                $("#chatbox")
+            scrollDownChats();
+        }
+        const addResponse = (response) => {
+
+            $('.chatbot-typing').remove();
+
+            $("#chatbox")
                 .append(
                     `<div class="chat-item">
-                        <div class="avatar">
-                            <img src="../assets/images/Blink-bot-sm.gif" />
+                            <div class="avatar">
+                                <img src="../assets/images/Blink-bot-sm.gif" />
+                            </div>
+                            <div class="text-dark-blue">
+                                <div class="chat">
+                                    ${response}
+                                </div>
+                            </div>
                         </div>
-                        <div class="text-dark-blue">
-                            <p class="chat">
-                                ${response}
-                            </p>
-                        </div>
-                    </div>
-                    `
+                        `
                 );
+            scrollDownChats();
+        }
+
+        const initBtnQueryActionListener = () => {
+            $(".btn-query").on('click', function(e) {
+                onBtnQueryClicked($(this));
+            })
+        }
+
+        const onBtnQueryClicked = (btnQuery) => {
+            var suggestionList = $("#suggestion-list")
+            if ($(btnQuery).find(".query").text().toLowerCase() == 'start over') {
+                setTimeout(() => {
+                    suggestionList.html(`
+                    
+                    <button type="button" class="btn btn-outline-dark-blue btn-query rounded-pill">
+                                        <p class="my-0">
+                                            <small class="query">How does this work?</small>
+                                        </p>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-dark-blue btn-query rounded-pill">
+                                        <p class="my-0">
+                                            <small class="query">I want to see my grades</small>
+                                        </p>
+                                    </button>
+                                    <button type="button" class="btn btn-outline-dark-blue btn-query rounded-pill">
+                                        <p class="my-0">
+                                            <small class="query">I want to know my enrolled courses</small>
+                                        </p>
+                                    </button>`)
+                    initBtnQueryActionListener()
+                    $("#chatbox").html("")
+                    addResponse("How can I help you?");
+                }, 700)
+
+                return;
             }
 
+
+            if ($(btnQuery).data("action") == null || $(btnQuery).data("action") == "") {
+                sendQuery($(btnQuery).find('.query').text());
+            } else {
+                addQuery($(btnQuery).find('.query').text());
+                $.ajax({
+                    method: 'post',
+                    url: '../app/chatbot_action_response.php',
+                    data: {
+                        query: $(btnQuery).find('.query').text(),
+                        action: $(btnQuery).data("action")
+                    },
+                    dataType: 'json',
+                    success: function(action_res) {
+                        console.log(action_res)
+                        if (action_res.suggestions.length > 0) {
+                            suggestionList.html("");
+                            let suggestionItem = `
+                                        <button disabled type="button" class="btn btn-outline-dark-blue rounded-pill">
+                                            <p class="my-0">
+                                                <small class="query">...</small>
+                                            </p>
+                                        </button>
+                                    `;
+
+                            suggestionList.append(suggestionItem);
+                        }
+                        setTimeout(() => {
+                            if (action_res.suggestions.length > 0) {
+                                suggestionList.html("");
+
+                            }
+                            for (let suggestion of action_res.suggestions) {
+                                let suggestionItem = `
+                                        <button type="button" data-action="${action_res.action}" class="btn btn-outline-dark-blue btn-query rounded-pill">
+                                            <p class="my-0">
+                                                <small class="query">${suggestion}</small>
+                                            </p>
+                                        </button>
+                                    `;
+
+                                suggestionList.append(suggestionItem);
+                            }
+
+                            $(".btn-query").on('click', function(e) {
+                                onBtnQueryClicked($(this));
+                            })
+                            addResponse(action_res.message)
+                        }, 700)
+                    },
+                    error: function(err) {
+                        console.error('error: ', err)
+                    }
+                })
+            }
+        }
+        const sendQuery = (query) => {
             addQuery(query);
             $("#chatbox").append(`
             
             `)
             $.ajax({
                 method: 'post',
-                url: '../app/generate_response.php',
+                url: '../app/chatbot_response.php',
                 data: {
                     query
                 },
                 dataType: 'json',
                 success: function(res) {
-                    addResponse(res);
+                    console.log(res)
+                    if (res.response_type == 'Action') {
+                        let suggestionList = $("#suggestion-list");
+
+                        $.ajax({
+                            method: 'post',
+                            url: '../app/chatbot_action_response.php',
+                            data: {
+                                query,
+                                action: res.action
+                            },
+                            dataType: 'json',
+                            success: function(action_res) {
+                                console.log(action_res)
+                                setTimeout(() => {
+                                    if (action_res.suggestions?.length > 0) {
+                                        suggestionList.html("");
+                                        for (let suggestion of action_res.suggestions) {
+                                            let suggestionItem = `
+                                        <button type="button" data-action="${action_res.action}" class="btn btn-outline-dark-blue btn-query rounded-pill">
+                                            <p class="my-0">
+                                                <small class="query">${suggestion}</small>
+                                            </p>
+                                        </button>
+                                    `;
+                                            suggestionList.append(suggestionItem);
+                                        }
+                                    }
+
+
+                                    if (action_res.suggestions?.length > 0) {
+                                        initBtnQueryActionListener();
+                                    }
+
+                                    addResponse(action_res.message)
+                                }, 700)
+                            },
+                            error: function(err) {
+                                console.error(err)
+                            }
+                        })
+                    } else {
+                        setTimeout(() => addResponse(res.message), 700);
+                    }
                 }
             })
         }
@@ -202,6 +310,11 @@ if ($student == null) {
 
                 $("#chat-input").val('');
             })
+
+            $(".btn-query").on('click', function(e) {
+                onBtnQueryClicked($(this));
+            })
+
         })
     </script>
 </body>

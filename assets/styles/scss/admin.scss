@@ -1,0 +1,115 @@
+@import './colors';
+
+$sidebar-w: 17vw;
+$sidebar-w-sm: 0vw;
+$sidebar-w-closed: 0;
+$main-navbar-h: 10vh;
+
+body{
+    background: #f8f9fa !important;
+}
+
+.sidebar {
+    position: fixed;
+    width: $sidebar-w;
+    height: 100vh;
+    background: $dark_blue;
+    z-index: 100;
+    overflow: hidden;
+    &.closed {
+        width: $sidebar-w-closed !important;
+    }
+
+    @media screen and (max-width:768px) {
+        width: $sidebar-w-sm !important;
+    }
+
+    .sidebar-header {
+        display: flex;
+        align-items: center;
+        padding: 12px 20px;
+        overflow: hidden;
+
+    }
+
+    .nav-item {
+        width: 100% !important;
+        padding: 5px 0px;
+        padding-left: 8px;
+
+        &.active {
+            .nav-link {
+                background: rgba(#896E33,1);
+                color: white !important;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                border-radius: 20px 0 0 20px;
+                box-shadow: 1px 1px 10px rgba($dark_blue, 0.3);
+            }
+        }
+
+        &:not(.active):hover {
+            .nav-link {
+                background: rgba(#896E33,0.4);
+                padding-top: 10px;
+                padding-bottom: 10px;
+                color: white !important;
+                border-radius: 20px 0 0 20px;
+            }
+        }
+
+        .nav-link {
+            border-radius: 20px 0 0 20px;
+            transition: 200ms;
+            display: flex !important;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            width: 100% !important;
+
+            span {
+                margin-left: 18px;
+            }
+        }
+    }
+}
+
+main {
+    margin-left: $sidebar-w;
+
+    &.expanded {
+        margin-left: $sidebar-w-closed !important;
+    }
+
+    .content {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-top: 20px;
+    }
+
+    @media screen and (max-width:768px) {
+        margin-left: $sidebar-w-sm;
+    }
+}
+
+
+.text-profile-pic {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    font-weight: 300 !important;
+    align-items: center;
+    border-radius: 50%;
+    font-size: 0.8rem;
+}
+
+.table{
+    .table-header{
+        background: $dark-blue-accent !important;
+        background-color: $dark-blue-accent !important;
+    }
+}
+
+.create-form-card{
+    border-top: 4px solid $dark-blue !important;
+}

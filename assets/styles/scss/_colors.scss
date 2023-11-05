@@ -1,5 +1,12 @@
 $dark_blue: #17233a;
-$gold: #f5a425;
-$custom_theme:(
+$dark_blue_accent: #33425E;
+$gold: #DE9B09;
+$dark-yellow:#896E33;
+$blue: #0953DE;
+
+$custom_theme: (
     'dark-blue':$dark_blue,
+    'dark-blue-accent':$dark_blue_accent,
+    'blue':$blue,
+    'dark-yellow':$dark-yellow,
 );

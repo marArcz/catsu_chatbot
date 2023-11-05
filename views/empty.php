@@ -9,6 +9,6 @@
     <?php require_once '../includes/header.php' ?>
 </head>
 <body>
-    
+<?php require_once '../includes/navbar.php' ?>
 </body>
 </html>
