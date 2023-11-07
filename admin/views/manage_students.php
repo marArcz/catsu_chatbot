@@ -94,7 +94,19 @@
                 <div class="row mt-2 gy-4 mb-3">
                     <!-- enrollment records -->
                     <div class="col-md-12">
-                        <p class="form-text">Enrollment Records</p>
+                        <div class="d-flex justify-content-between align-items-center mb-2 ">
+                            <div>
+                                <p class="form-text">Enrollment Records</p>
+                            </div>
+                            <div class="d-flex align-items-center ">
+                                <button class="btn btn-dark-blue">
+                                    <i class="bi bi-plus"></i>
+                                    <span>
+                                        <small>Add</small>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
                         <div class="card shadow-sm rounded-3">
                             <div class="card-body px-1">
                                 <div class="row">
@@ -134,7 +146,7 @@
                                         <div class="card-body px-1">
                                             <div class="row align-items-center">
                                                 <div class="col-1 text-center">
-                                                    <button class="btn btn-light" type="button">
+                                                    <button class="btn btn-light rounded-0 collapsed row-collapse-toggler" aria-expanded="false" type="button" data-bs-toggle="collapse" data-bs-target="#enrolled-courses-row-<?= $enrollment['id'] ?>">
                                                         <i class="bi bi-chevron-right"></i>
                                                     </button>
                                                 </div>
@@ -164,7 +176,38 @@
                                                     </small>
                                                 </div>
                                                 <div class="col">
-                                                    Action
+                                                </div>
+                                            </div>
+                                            <div class="enrolled-courses bg-light mx-3 border mt-3 rounded-2 row-collapse collapse" id="enrolled-courses-row-<?= $enrollment['id'] ?>">
+                                                <div class="p-3">
+                                                    <p class="fs-6 text-secondary mb-3">Enrolled Courses</p>
+                                                    <table class="table">
+                                                        <thead class="text-secondary">
+                                                            <tr>
+                                                                <th class="text-dark fw-light">#</th>
+                                                                <th class="text-dark fw-light">Course code</th>
+                                                                <th class="text-dark fw-light">Course name</th>
+                                                                <th class="text-dark fw-light">Unit</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <?php
+                                                            $get_enrolled_courses = $pdo->prepare("SELECT enrolled_courses.*, courses.name, courses.unit FROM enrolled_courses INNER JOIN courses ON enrolled_courses.course_code  = courses.code WHERE enrolled_courses.enrollment_id = ?");
+                                                            $get_enrolled_courses->execute([$enrollment['id']]);
+                                                            $i = 1;
+                                                            while ($enrolled_course = $get_enrolled_courses->fetch()) {
+                                                            ?>
+                                                                <tr>
+                                                                    <td><?= $i++ ?></td>
+                                                                    <td><?= $enrolled_course['course_code'] ?></td>
+                                                                    <td><?= $enrolled_course['name'] ?></td>
+                                                                    <td><?= $enrolled_course['unit'] ?></td>
+                                                                </tr>
+                                                            <?php
+                                                            }
+                                                            ?>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
                                         </div>
@@ -176,22 +219,6 @@
                         <?php
                         }
                         ?>
-                    </div>
-                    <div class="col-md">
-                        <p class="form-text mb-2 mt-0">Enrolled Courses</p>
-                        <div class="card shadow-sm">
-                            <div class="card-body p-4">
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>
-                                                
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -207,6 +234,21 @@
                 if (val != '') {
                     window.location.href = `manage_students.php?st=${val}`;
                 }
+            })
+
+            $(".row-collapse-toggler").on("click", function(e) {
+                let btn = $(this);
+                console.log(btn)
+                if (btn.hasClass('collapsed')) {
+                    btn.find('i').addClass("bi-chevron-right").removeClass("bi-chevron-down")
+                } else {
+                    btn.find('i').removeClass("bi-chevron-right").addClass("bi-chevron-down")
+                }
+                // if(btn.attr("aria-expanded")){
+                //     btn.find('i').addClass("bi-chevron-right").removeClass("bi-chevron-down");
+                // }else{
+                //     btn.find('i').removeClass("bi-chevron-right").addClass("bi-house");
+                // }
             })
         })
     </script>

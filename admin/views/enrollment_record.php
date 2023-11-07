@@ -18,7 +18,13 @@
         <?php require_once '../includes/navbar.php' ?>
         <div class="content">
             <div class="container-lg">
-                
+                <form action="">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                        <select name="" class="form-select" id=""></select>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </main>

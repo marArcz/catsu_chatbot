@@ -21,7 +21,7 @@
         <?php require_once '../includes/navbar.php' ?>
         <div class="content">
             <div class="container-sm">
-                <h2 class="mt-3">Dashboard</h2>
+                <h5 class="mt-3">Dashboard</h5>
             </div>
         </div>
     </main>
