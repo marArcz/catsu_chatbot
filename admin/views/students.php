@@ -48,11 +48,11 @@ if (isset($_POST['filter'])) {
 <body class="bg-light">
     <?php $current_page = 'students' ?>
     <?php require_once '../includes/sidebar.php' ?>
-    <main>
+    <main id="main" class="<?= Session::hasSession("closed_sidebar") ? 'expanded':'' ?>">
         <?php $header_title = 'Manage Student Record'; ?>
         <?php require_once '../includes/navbar.php' ?>
         <div class="content">
-            <div class="container-lg">
+            <div class="container-fluid">
                 <div class="mb-2">
                     <button class="btn btn-light rounded-1 text-dark-blue dropdown-toggle <?= isset($_POST['filter'])? 'active':'' ?>" id="filter-btn" type="button" data-bs-toggle="collapse" data-bs-target="#filter-collapse" aria-expanded="false">
                         <span class="fw-bold">Filters</span>

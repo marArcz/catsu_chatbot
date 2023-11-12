@@ -1,4 +1,4 @@
-<div class="sidebar bg-dark-blue-accent shadow ">
+<div id="sidebar" class="sidebar bg-dark-blue shadow <?= Session::hasSession("closed_sidebar") ? 'closed':'' ?>">
     <div class="sidebar-header bg-dark-blue">
         <a class=" d-flex link-light align-items-center text-decoration-none" href="#">
             <img src="../../assets/images/catsu.png" width="40" alt="">
@@ -12,6 +12,16 @@
                 'link' => 'dashboard.php',
                 'key' => 'dashboard',
                 'icon'=>'bi bi-house-fill'
+            ],
+            'Programs' => [
+                'link' => 'manage_programs.php',
+                'key' => 'programs',
+                'icon'=>'bi bi-person-fill'
+            ],
+            'Courses' => [
+                'link' => 'courses.php',
+                'key' => 'courses',
+                'icon'=>'bi bi-person-fill'
             ],
             'Student records' => [
                 'link' => 'manage_students.php',
@@ -40,3 +50,5 @@
         <?php endforeach ?>
     </ul>
 </div>
+
+<div class="sidebar-overlay-sm <?= Session::hasSession("closed_sidebar")?'show':'' ?>" id="sidebar-overlay"></div>

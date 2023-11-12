@@ -27,4 +27,38 @@ https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js
     <?php
     }
     ?>
+
+    $("#menu-toggler").on("click", function(e) {
+        $("#sidebar").toggleClass("closed")
+        $("#main").toggleClass("expanded")
+        $("#sidebar-overlay").toggleClass("show")
+
+        if ($("#sidebar").hasClass("closed")) {
+            console.log('closed')
+            $.post("../app/add_session.php",{key:'closed_sidebar',value:true},(res) => {
+                console.log(res)
+            });
+        }else{
+            $.post("../app/remove_session.php",{key:'closed_sidebar'},(res) => {
+                console.log(res)
+            });
+        }
+    })
+
+    $("#sidebar-overlay").on('click', function(e) {
+        $("#sidebar").toggleClass("closed")
+        $("#main").toggleClass("expanded")
+        $("#sidebar-overlay").toggleClass("show")
+
+        if ($("#sidebar").hasClass("closed")) {
+            console.log('closed')
+            $.post("../app/add_session.php",{key:'closed_sidebar',value:true},(res) => {
+                console.log(res)
+            });
+        }else{
+            $.post("../app/remove_session.php",{key:'closed_sidebar'},(res) => {
+                console.log(res)
+            });
+        }
+    })
 </script>

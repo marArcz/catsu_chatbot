@@ -1,8 +1,8 @@
-<nav class="navbar bg-dark-blue-accent navbar-dark shadow-sm py-0">
+<nav id="navbar" class="navbar bg-dark-blue navbar-dark shadow-sm py-0">
     <div class="w-100 ">
-        <div class="container-lg d-flex align-items-center py-1">
+        <div class="container-fluid d-flex align-items-center py-1">
             <div>
-                <button class="btn btn-sm text-white border-0" id="menu-toggler" type="button"><i class="bi bi-list fs-4 "></i></button>
+                <button class="btn btn-sm text-warning border-0" id="menu-toggler" type="button"><i class="bi bi-list fs-4 "></i></button>
             </div>
             <div class="ms-auto" id="navbarNav">
                 <ul class="nav flex-row ms-auto align-items-center my-0">

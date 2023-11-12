@@ -15,11 +15,11 @@
 <body class="bg-light">
     <?php $current_page = 'responses' ?>
     <?php require_once '../includes/sidebar.php' ?>
-    <main>
+    <main id="main" class="<?= Session::hasSession("closed_sidebar") ? 'expanded':'' ?>">
         <?php $header_title = 'Manage Responses'; ?>
         <?php require_once '../includes/navbar.php' ?>
         <div class="content">
-            <div class="container-lg">
+            <div class="container-fluid">
                 <div class="card border-0 shadow-sm">
                     <div class="card-body">
                         <div class="d-flex flex-wrap justify-content-between align-items-center">

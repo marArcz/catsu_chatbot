@@ -14,12 +14,12 @@
 <body class="bg-light">
     <?php $current_page = 'responses' ?>
     <?php require_once '../includes/sidebar.php' ?>
-    <main>
+    <main id="main" class="<?= Session::hasSession("closed_sidebar") ? 'expanded':'' ?>">
         <?php $header_title = 'Create Responses'; ?>
         <?php require_once '../includes/navbar.php' ?>
         <!-- <div class="bg-dark-blue-accent py-5"></div> -->
         <div class="content">
-            <div class="container-lg">
+            <div class="container-fluid">
                 <div class="col-md-8 mx-auto">
                     <form action="" method="post">
                         <div class="card shadow-sm border mb-3 create-form-card">

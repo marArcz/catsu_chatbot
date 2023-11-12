@@ -76,7 +76,12 @@ body {
   max-width: 70% !important;
   display: flex;
   gap: 10px;
-  margin-bottom: 15px !important;
+  margin-bottom: 20px !important;
+}
+@media screen and (max-width: 768px) {
+  .card-chatbox .chatbox .chat-item {
+    max-width: 90% !important;
+  }
 }
 .card-chatbox .chatbox .chat-item .chat {
   border: 1px solid rgba(23, 35, 58, 0.3);
@@ -132,4 +137,31 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.clickable {
+  position: relative;
+  cursor: pointer;
+}
+.clickable::before {
+  content: " ";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: rgba(157, 157, 157, 0.1);
+  display: none;
+}
+.clickable:hover::before {
+  display: block;
+}
+.clickable:active::before {
+  display: block;
+  background: rgba(99, 99, 99, 0.2) !important;
+}
+
+.profile-dropdown .dropdown-item:hover {
+  color: white !important;
+  background: rgba(128, 128, 128, 0.2);
 }/*# sourceMappingURL=app.css.map */

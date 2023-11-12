@@ -12,15 +12,23 @@
 <body class="bg-light">
     <?php $current_page = 'students' ?>
     <?php require_once '../includes/sidebar.php' ?>
-    <main>
+    <main id="main" class="<?= Session::hasSession("closed_sidebar") ? 'expanded' : '' ?>">
         <?php $header_title = 'Manage Students'; ?>
         <?php require_once '../includes/navbar.php' ?>
         <div class="content">
-            <div class="container-lg">
+            <div class="container-fluid">
+                <div class="text-end">
+                    <a href="#insert-modal" data-bs-toggle="modal" class="btn btn-warning text-light">
+                        <div class="d-flex flex-colum gap-2 fw-medium">
+                            <i class="bi bi-plus-circle-fill"></i>
+                            <span>Insert student record</span>
+                        </div>
+                    </a>
+                </div>
                 <form action="" method="post">
                     <div class="col-md-3">
                         <label for="" class="form-label">Student ID No.</label>
-                        <select name="student_id_no" id="student-id-no" class="form-select">
+                        <select name="student_id_no" id="student-id-no" class="form-select shadow-sm">
                             <option value="">Select</option>
                             <?php
                             $query = $pdo->prepare("SELECT student_id_no FROM students");
@@ -32,17 +40,23 @@
                             }
                             ?>
                         </select>
-                        <!-- <input 
-                            type="text" 
-                            class="form-control shadow-sm"
-                            id="student-id-no-input"
-                            > -->
                     </div>
                 </form>
+
                 <!-- student info card -->
-                <p class="form-text text-black-50 mb-2 mt-4">
-                    <span>Student Information</span>
-                </p>
+
+                <div class="mb-2 d-flex justify-content-between mt-3 align-items-center">
+                    <div>
+                        <p class="form-text text-black-50 my-0">
+                            <span>Student Information</span>
+                        </p>
+                    </div>
+                    <div>
+                        <?php if (isset($_GET['st'])) : ?>
+                            <a href="edit_student.php?st=<?= $_GET['st'] ?>" class="btn btn-light-dark-blue-accent btn-sm fw-medium">Update info</a>
+                        <?php endif ?>
+                    </div>
+                </div>
                 <div class="card shadow-sm border">
                     <div class="card-body p-4">
                         <div class="">
@@ -52,7 +66,6 @@
                                 $query = $pdo->prepare('SELECT * FROM students WHERE student_id_no=?');
                                 $query->execute([$student_id_no]);
                                 $student = $query->fetch(PDO::FETCH_ASSOC);
-
                             ?>
                                 <form action="" method="post">
                                     <div class="row mb-3">
@@ -60,7 +73,7 @@
                                             <label for="" class="form-label">
                                                 <small>Student ID Number</small>
                                             </label>
-                                            <input type="text" name="firstname" value="<?= $student['student_id_no'] ?>" class="form-control" disabled required>
+                                            <input type="text" name="student_id_no" value="<?= $student['student_id_no'] ?>" class="form-control" disabled required>
                                         </div>
                                     </div>
                                     <div class="row gy-3">
@@ -99,12 +112,14 @@
                                 <p class="form-text">Enrollment Records</p>
                             </div>
                             <div class="d-flex align-items-center ">
-                                <button class="btn btn-dark-blue">
-                                    <i class="bi bi-plus"></i>
-                                    <span>
-                                        <small>Add</small>
-                                    </span>
-                                </button>
+                                <?php if (isset($_GET['st']) && $student) : ?>
+                                    <a href="add_new_enrollment.php?st=<?= $student_id_no ?? '' ?>" class="btn btn-dark-blue ">
+                                        <i class="bi bi-plus"></i>
+                                        <span>
+                                            <small>Insert new record</small>
+                                        </span>
+                                    </a>
+                                <?php endif; ?>
                             </div>
                         </div>
                         <div class="card shadow-sm rounded-3">
@@ -138,7 +153,7 @@
                         ?>
                             <div>
                                 <?php
-                                $query = $pdo->prepare("SELECT enrollments.*, programs.program_name FROM enrollments INNER JOIN programs ON enrollments.program_id = programs.id WHERE enrollments.student_id_no = ?");
+                                $query = $pdo->prepare("SELECT enrollments.*, programs.program_name FROM enrollments INNER JOIN programs ON enrollments.program_id = programs.id WHERE enrollments.student_id_no = ? ORDER BY year_level ASC, semester ASC");
                                 $query->execute([$student_id_no]);
                                 while ($enrollment = $query->fetch(PDO::FETCH_ASSOC)) {
                                 ?>
@@ -176,6 +191,7 @@
                                                     </small>
                                                 </div>
                                                 <div class="col">
+                                                    <a href="edit_enrollment.php?id=<?= $enrollment['id'] ?>" class="btn btn-light-dark-blue btn-sm" type="button">Update</a>
                                                 </div>
                                             </div>
                                             <div class="enrolled-courses bg-light mx-3 border mt-3 rounded-2 row-collapse collapse" id="enrolled-courses-row-<?= $enrollment['id'] ?>">
@@ -192,7 +208,7 @@
                                                         </thead>
                                                         <tbody>
                                                             <?php
-                                                            $get_enrolled_courses = $pdo->prepare("SELECT enrolled_courses.*, courses.name, courses.unit FROM enrolled_courses INNER JOIN courses ON enrolled_courses.course_code  = courses.code WHERE enrolled_courses.enrollment_id = ?");
+                                                            $get_enrolled_courses = $pdo->prepare("SELECT enrolled_courses.*, courses.name, courses.unit FROM enrolled_courses INNER JOIN courses ON enrolled_courses.course_code = courses.code WHERE enrolled_courses.enrollment_id = ?");
                                                             $get_enrolled_courses->execute([$enrollment['id']]);
                                                             $i = 1;
                                                             while ($enrolled_course = $get_enrolled_courses->fetch()) {
@@ -225,6 +241,7 @@
         </div>
     </main>
 
+    <?php require_once '../includes/student-modals.php' ?>
     <?php require_once '../includes/scripts.php' ?>
     <script>
         $("#data-table").DataTable();

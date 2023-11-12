@@ -17,7 +17,7 @@
         <?php require_once '../includes/navbar.php' ?>
         <div class="content">
             <div class="container-fluid">
-              
+                
             </div>
         </div>
     </main>
@@ -28,4 +28,4 @@
     </script>
 </body>
 
-</html>
+</html> 

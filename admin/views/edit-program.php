@@ -12,16 +12,16 @@
 <body class="bg-light">
     <?php $current_page = 'responses' ?>
     <?php require_once '../includes/sidebar.php' ?>
-    <main id="main">
+    <main>
         <?php $header_title = 'Manage Responses'; ?>
         <?php require_once '../includes/navbar.php' ?>
         <div class="content">
-            <div class="container-fluid">
+            <div class="container-lg">
               
             </div>
         </div>
     </main>
- 
+
     <?php require_once '../includes/scripts.php' ?>
     <script>
         $("#data-table").DataTable();
