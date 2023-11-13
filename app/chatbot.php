@@ -17,7 +17,7 @@ class Chatbot
     function getSchoolYears(string $action, string $message = "All right, in what school year should I look for?"): array
     {
         $schoolYears = [];
-        $query = $this->pdo->prepare("SELECT * FROM enrolled_courses WHERE student_id_no = ?");
+        $query = $this->pdo->prepare("SELECT * FROM enrollments WHERE student_id_no = ?");
         $query->execute([$this->user['student_id_no']]);
 
         if ($query->rowCount() == 0) {
@@ -29,7 +29,7 @@ class Chatbot
             ];
         } else {
             while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-                $schoolYears[] = $row['school_year_start'] . '-' . $row['school_year_end'];
+                $schoolYears[] = $row['year_start'] . '-' . $row['year_end'];
             }
 
             return [
@@ -56,37 +56,49 @@ class Chatbot
             $grades = "";
 
             // get enrolled courses
-            $get_enrolled_courses = $this->pdo->prepare("SELECT enrolled_courses.*,courses.name as course_name,courses.code as course_code FROM enrolled_courses INNER JOIN courses ON enrolled_courses.course_code = courses.code WHERE student_id_no = ? AND school_year_start=? AND school_year_end=? AND enrolled_courses.semester=?");
-            $get_enrolled_courses->execute([$this->user['student_id_no'], $yearStart, $yearEnd, $semester]);
+            $get_enrolled_courses = $this->pdo->prepare("SELECT enrolled_courses.*,courses.name as course_name,courses.code as course_code FROM enrolled_courses INNER JOIN courses ON enrolled_courses.course_code = courses.code WHERE enrollment_id IN (SELECT id FROM enrollments WHERE year_start = ? AND year_end = ?) AND enrolled_courses.semester=?");
+            $get_enrolled_courses->execute([$yearStart, $yearEnd, $semester]);
 
             $enrolled_courses = $get_enrolled_courses->fetchAll(PDO::FETCH_ASSOC);
 
-            foreach ($enrolled_courses as $key => $enrolled_course) {
-                $course_name = $enrolled_course['course_name'];
-                $course_code = $enrolled_course['course_code'];
+            if ($enrolled_courses) {
+                foreach ($enrolled_courses as $key => $enrolled_course) {
+                    $course_name = $enrolled_course['course_name'];
+                    $course_code = $enrolled_course['course_code'];
 
-                // get grade for this course
-                $get_grade = $this->pdo->prepare('SELECT * FROM grades WHERE course_code LIKE ? AND student_id_no = ?');
-                $get_grade->execute(["%$course_code%", $this->user['student_id_no']]);
-                $grade = $get_grade->fetch(PDO::FETCH_ASSOC);
-                $grade = number_format($grade['grade'], 1) ?? 'N/A';
+                    // get grade for this course
+                    $get_grade = $this->pdo->prepare('SELECT * FROM grades WHERE course_code LIKE ? AND student_id_no = ? AND semester = ?');
+                    $get_grade->execute(["%$course_code%", $this->user['student_id_no'],$semester]);
+                    $grade = $get_grade->fetch(PDO::FETCH_ASSOC);
+                    $grade = number_format($grade['grade'], 1) ?? 'N/A';
 
-                $grades .= "<li class='list-group-item d-flex align-items-center justify-content-between'>" .
-                    "<small class='text-secondary'>$course_name</small>" .
-                    "<small class='fw-bold'>$grade</small>" .
-                    "</li>";
+                    $grades .= "<li class='list-group-item d-flex align-items-center justify-content-between'>" .
+                        "<small class='text-secondary'>$course_name</small>" .
+                        "<small class='fw-bold'>$grade</small>" .
+                        "</li>";
+                }
+
+                $response = str_replace('{grades}', $grades, $response);
+
+                Session::removeSession($schoolYearSession);
+                Session::removeSession($this->chatBotActionSession);
+                return [
+                    'message' => $response,
+                    'suggestions' => ['Start over'],
+                    'action' => '', //next action
+                    'end' => true
+                ];
+            } else {
+                $response = "Sorry I can't find any courses you enrolled for the school year {schoolYear}, {semester}";
+                $response = str_replace('{schoolYear}',$yearStart . '-' . $yearEnd,$response);
+                $response = str_replace('{semester}', $semester == 1 ? '1st semester' : '2nd semester', $response);
+                return [
+                    'message' => $response,
+                    'suggestions' => ['Start over'],
+                    'action' => '', //next action
+                    'end' => true
+                ];
             }
-
-            $response = str_replace('{grades}', $grades, $response);
-
-            Session::removeSession($schoolYearSession);
-            Session::removeSession($this->chatBotActionSession);
-            return [
-                'message' => $response,
-                'suggestions' => ['Start over'],
-                'action' => '', //next action
-                'end' => true
-            ];
         } else if (count(explode('-', $user_query)) == 2) {
             $yearStart = explode('-', $user_query)[0];
             $yearEnd = explode('-', $user_query)[1];
@@ -104,7 +116,7 @@ class Chatbot
             $queries = $get_queries->fetchAll(PDO::FETCH_ASSOC);
             $matched = false;
             foreach ($queries as $key => $query) {
-                if(stristr($user_query, $query['keyword']) || stristr($user_query, $query['keyword'])){
+                if (stristr($user_query, $query['keyword']) || stristr($user_query, $query['keyword'])) {
                     $matched = true;
                     break;
                 }
@@ -146,7 +158,7 @@ class Chatbot
             $enrolled_course_response = "";
 
             // get enrolled courses
-            $get_enrolled_courses = $this->pdo->prepare("SELECT enrolled_courses.*,courses.name as course_name,courses.code as course_code FROM enrolled_courses INNER JOIN courses ON enrolled_courses.course_code = courses.code WHERE student_id_no = ? AND school_year_start=? AND school_year_end=? AND enrolled_courses.semester=?");
+            $get_enrolled_courses = $this->pdo->prepare("SELECT enrolled_courses.*,courses.name as course_name,courses.code as course_code FROM enrolled_courses INNER JOIN courses ON enrolled_courses.course_code = courses.code WHERE student_id_no = ? AND enrollment_id IN (SELECT id FROM enrollments WHERE year_start=? AND year_end=?) AND enrolled_courses.semester=?");
             $get_enrolled_courses->execute([$this->user['student_id_no'], $yearStart, $yearEnd, $semester]);
 
             $enrolled_courses = $get_enrolled_courses->fetchAll(PDO::FETCH_ASSOC);

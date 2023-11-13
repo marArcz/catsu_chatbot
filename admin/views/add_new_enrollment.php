@@ -76,7 +76,7 @@ if ($enrollment) {
                                             <label for="" class="form-label text-secondary">
                                                 Year level:
                                             </label>
-                                            <select name="year_level" required class="form-control">
+                                            <select name="year_level" required class="form-select">
                                                 <?php
                                                 for ($x = 1; $x <= 4; $x++) {
                                                 ?>

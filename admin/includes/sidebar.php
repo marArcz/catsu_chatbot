@@ -21,16 +21,16 @@
             'Courses' => [
                 'link' => 'courses.php',
                 'key' => 'courses',
-                'icon'=>'bi bi-person-fill'
+                'icon'=>'bi bi-book'
             ],
             'Student records' => [
                 'link' => 'manage_students.php',
                 'key' => 'students',
                 'icon'=>'bi bi-person-fill'
             ],
-            'Enrollment records' => [
-                'link' => 'enrollment_record.php',
-                'key' => 'enrollment_record',
+            'Grades' => [
+                'link' => 'grades.php',
+                'key' => 'grades',
                 'icon'=>'bi bi-book'
             ],
             'Manage Responses' => [

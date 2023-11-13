@@ -7,7 +7,7 @@ $chatBotActionSession = 'chatbot_action_session';
 
 $keyword = $_POST['query'];
 $query = $pdo->prepare("SELECT * FROM queries WHERE keyword LIKE :keyword OR :keyword LIKE CONCAT('%',keyword,'%') ORDER BY keyword DESC");
-$query->execute(["keyword"=>"%$keyword%"]);
+$query->execute(["keyword"=>$keyword]);
 
 $result = $query->fetch(PDO::FETCH_ASSOC);
 
