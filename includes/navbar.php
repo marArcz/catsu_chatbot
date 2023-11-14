@@ -1,6 +1,6 @@
 <nav class="navbar navbar-expand-lg bg-dark-blue navbar-dark main-navbar">
     <div class="container">
-        <a class="navbar-brand d-flex align-items-center" href="#">
+        <a class="navbar-brand d-flex align-items-center" href="home.php">
             <img src="../assets/images/catsu.png" width="50" alt="">
             <span class="ms-2"><?= $_ENV['APP_NAME'] ?></span>
         </a>
