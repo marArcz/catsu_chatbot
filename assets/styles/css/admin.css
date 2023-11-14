@@ -141,4 +141,8 @@ main .content {
 
 .create-form-card {
   border-top: 4px solid #17233a !important;
+}
+
+.grades-card {
+  border-top: 2px solid rgba(23, 35, 58, 0.5) !important;
 }/*# sourceMappingURL=admin.css.map */

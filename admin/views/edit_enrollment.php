@@ -1,5 +1,5 @@
 <?php require_once '../includes/authenticated.php' ?>
-<?php require_once '../app/add_new_enrollment.php' ?>
+<?php require_once '../app/edit_enrollment.php' ?>
 
 <?php
 if (!isset($_GET['id'])) {
@@ -8,8 +8,6 @@ if (!isset($_GET['id'])) {
 }
 
 $id = $_GET['id'];
-
-
 
 // get latest enrollment record
 $query = $pdo->prepare("SELECT * FROM enrollments WHERE id = ?");
@@ -29,7 +27,7 @@ $student = $query->fetch();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Insert new enrollment record | Admin</title>
+    <title>Update enrollment record | Admin</title>
     <?php require_once '../includes/header.php' ?>
 </head>
 
@@ -60,18 +58,18 @@ $student = $query->fetch();
                             <p class="my-1 fw-semibold text-secondary mb-3">Update enrollment record</p>
                             <hr>
                             <form action="" method="post">
-                                <input type="hidden" name="student_id_no" value="<?= $student_id_no ?>">
+                                <input type="hidden" name="student_id_no" value="<?= $enrollment['student_id_no'] ?>">
                                 <div class="mb-3">
                                     <div class="row gy-3">
                                         <div class="col-md">
                                             <label for="" class="form-label text-secondary">
                                                 Year level:
                                             </label>
-                                            <select name="year_level" required class="form-control">
+                                            <select name="year_level" required class="form-select">
                                                 <?php
                                                 for ($x = 1; $x <= 4; $x++) {
                                                 ?>
-                                                    <option <?= $enrollment['year_level'] == $x ? 'select' : '' ?> value="<?= $x ?>"><?= $x ?></option>
+                                                    <option <?= $enrollment['year_level'] == $x ? 'selected' : '' ?> value="<?= $x ?>"><?= $x ?></option>
                                                 <?php
                                                 }
                                                 ?>
@@ -91,7 +89,7 @@ $student = $query->fetch();
                                             <label for="" class="form-label text-secondary">
                                                 Block:
                                             </label>
-                                            <select name="block" required class="form-control">
+                                            <select name="block" required class="form-select">
                                                 <?php
                                                 $blocks = ['A', 'B', 'C', 'D', 'E', 'F'];
                                                 foreach ($blocks as $key => $block) {
@@ -186,7 +184,7 @@ $student = $query->fetch();
                                 </div>
                                 <div class="d-flex gap-2 mt-5">
                                     <a href="manage_students.php?st=<?= $student['student_id_no'] ?>" class="btn btn-light-dark">Cancel</a>
-                                    <button type="submit" class="btn btn-dark-blue" name="add_enrollment">Save Changes</button>
+                                    <button type="submit" class="btn btn-dark-blue" name="submit">Save Changes</button>
                                 </div>
                             </form>
                         </div>

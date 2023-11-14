@@ -7,7 +7,7 @@
             <div class="ms-auto" id="navbarNav">
                 <ul class="nav flex-row ms-auto align-items-center my-0">
                     <li class="nav-item">
-                        <a class="nav-link link-dark text-uppercase fs-6 fw-bold <?= $current_page == 'profile' ? 'active' : '' ?> " href="profile.php">
+                        <!-- <a class="nav-link link-dark text-uppercase fs-6 fw-bold <?= $current_page == 'profile' ? 'active' : '' ?> " href="profile.php">
                             <?php if ($admin['image'] == '') : ?>
                                 <div class="text-profile-pic bg-light text-dark shadow-sm bg-opacity-75 ">
                                     <div class="text">
@@ -15,7 +15,31 @@
                                     </div>
                                 </div>
                             <?php endif ?>
-                        </a>
+                        </a> -->
+
+                        <div class="dropdown">
+                            <button class="btn btn-sm " type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div class="text-profile-pic bg-light text-dark shadow-sm bg-opacity-75 ">
+                                    <div class="text">
+                                        <?= $admin['firstname'][0] .  $admin['lastname'][0] ?>
+                                    </div>
+                                </div>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end py-0">
+                                <li class="border-bottom py-1">
+                                    <a class="dropdown-item" href="view_response.php?id=<?= $row['id'] ?>">
+                                        <i class="bi bi-person-fill me-2"></i>
+                                        <small>Profile</small>
+                                    </a>
+                                </li>
+                                <li class="border-bottom py-2">
+                                    <a class="dropdown-item delete" href="../app/logout.php">
+                                        <i class="bi bi-sign-out me-2"></i>
+                                        <small>Log out</small>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
                 </ul>
             </div>

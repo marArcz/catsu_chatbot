@@ -1,4 +1,5 @@
 <?php require_once '../includes/authenticated.php' ?>
+<?php require_once '../app/edit-grades.php' ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -111,53 +112,45 @@
                                 while ($enrollment = $query->fetch(PDO::FETCH_ASSOC)) {
                                 ?>
 
-                                    <div class="card shadow-sm rounded-3 mt-1 mb-3">
-                                        <div class="card-body px-1">
-                                            <div class="row align-items-center">
-                                                <div class="col-1 text-center">
-                                                    <button class="btn btn-light rounded-0 collapsed row-collapse-toggler" aria-expanded="false" type="button" data-bs-toggle="collapse" data-bs-target="#enrolled-courses-row-<?= $enrollment['id'] ?>">
-                                                        <i class="bi bi-chevron-right"></i>
-                                                    </button>
-                                                </div>
-                                                <div class="col">
-                                                    <small>
-                                                        <?= $enrollment['program_name'] ?>
-                                                    </small>
-                                                </div>
-                                                <div class="col">
-                                                    <small class=" fw-medium">
-                                                        <?= $enrollment['year_level'] ?>
-                                                    </small>
-                                                </div>
-                                                <div class="col">
-                                                    <small class=" fw-medium">
-                                                        <?= $enrollment['block'] ?>
-                                                    </small>
-                                                </div>
-                                                <div class="col">
-                                                    <small class=" fw-medium">
-                                                        <?= $enrollment['semester'] ?>
-                                                    </small>
-                                                </div>
-                                                <div class="col">
-                                                    <small class=" fw-medium">
-                                                        <?= $enrollment['year_start'] . '-' . $enrollment['year_end'] ?>
-                                                    </small>
-                                                </div>
-                                                <div class="col">
-                                                    <a href="edit_enrollment.php?id=<?= $enrollment['id'] ?>" class="btn btn-light-dark-blue btn-sm" type="button">Update</a>
-                                                </div>
-                                            </div>
+                                    <div class="card shadow-sm rounded-1 mt-1 mb-3 grades-card">
+                                        <div class="card-body">
+
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Program</th>
+                                                        <th>Year Level</th>
+                                                        <th>Block</th>
+                                                        <th>Semester</th>
+                                                        <th>School Year</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><?= $enrollment['program_name'] ?></td>
+                                                        <td><?= $enrollment['year_level'] ?></td>
+                                                        <td><?= $enrollment['block'] ?></td>
+                                                        <td><?= $enrollment['semester'] ?></td>
+                                                        <td>
+                                                            <?= $enrollment['year_start'] . '-' . $enrollment['year_end'] ?>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                             <div class="enrolled-courses mt-3 rounded-2 row-collapse " id="enrolled-courses-row-<?= $enrollment['id'] ?>">
-                                                <div class="p-3">
-                                                    <p class="fs-6 text-secondary mb-3">Enrolled Courses</p>
-                                                    <table class="table">
+                                                <div class="">
+                                                    <div class="d-flex align-items-center justify-content-between flex-wrap mb-3">
+                                                        <p class="fs-6 text-dark-blue-accent my-0">Enrolled Courses</p>
+                                                        <button data-id="<?= $enrollment['id'] ?>" type="button" data-bs-toggle="modal" data-bs-target="#edit-modal" class="btn btn-sm btn-dark-blue-accent">Edit Grades</button>
+                                                    </div>
+                                                    <table class="table table-bordered">
                                                         <thead class="text-secondary">
                                                             <tr>
                                                                 <th class="text-dark fw-light">#</th>
                                                                 <th class="text-dark fw-light">Course code</th>
                                                                 <th class="text-dark fw-light">Course name</th>
                                                                 <th class="text-dark fw-light">Unit</th>
+                                                                <th class="text-dark fw-light bg-dark-blue-accent bg-opacity-10">Grade</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -166,12 +159,16 @@
                                                             $get_enrolled_courses->execute([$enrollment['id']]);
                                                             $i = 1;
                                                             while ($enrolled_course = $get_enrolled_courses->fetch()) {
+                                                                $find_grade = $pdo->prepare('SELECT * FROM grades WHERE course_code = ? AND enrollment_id = ?');
+                                                                $find_grade->execute([$enrolled_course['course_code'], $enrolled_course['enrollment_id']]);
+                                                                $grade = $find_grade->fetch();
                                                             ?>
                                                                 <tr>
                                                                     <td><?= $i++ ?></td>
                                                                     <td><?= $enrolled_course['course_code'] ?></td>
                                                                     <td><?= $enrolled_course['name'] ?></td>
                                                                     <td><?= $enrolled_course['unit'] ?></td>
+                                                                    <td class="bg-dark-blue-accent bg-opacity-10 text-dark-blue-accent"><?= $grade ? $grade['grade'] : 'NA' ?></td>
                                                                 </tr>
                                                             <?php
                                                             }
@@ -195,7 +192,7 @@
         </div>
     </main>
 
-    <?php require_once '../includes/student-modals.php' ?>
+    <?php require_once '../includes/grades-modal.php' ?>
     <?php require_once '../includes/scripts.php' ?>
     <script>
         $("#data-table").DataTable();
@@ -220,6 +217,22 @@
                 // }else{
                 //     btn.find('i').removeClass("bi-chevron-right").addClass("bi-house");
                 // }
+            })
+
+            $("#edit-modal").on("show.bs.modal",function(e){
+                let btn = $(e.relatedTarget);
+                $.get('../app/get-grades.php',{id:btn.data('id')},function(res){
+                    console.log('res: ', res)
+                    $("#form-content").html(res)
+                })
+            })
+
+            $("#edit-modal").on("hidden.bs.modal",function(e){
+                $("#form-content").html("")
+            })
+
+            $(".input-grades").on("input",function(e){
+
             })
         })
     </script>
