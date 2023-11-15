@@ -143,38 +143,40 @@
                                                         <p class="fs-6 text-dark-blue-accent my-0">Enrolled Courses</p>
                                                         <button data-id="<?= $enrollment['id'] ?>" type="button" data-bs-toggle="modal" data-bs-target="#edit-modal" class="btn btn-sm btn-dark-blue-accent">Edit Grades</button>
                                                     </div>
-                                                    <table class="table table-bordered">
-                                                        <thead class="text-secondary">
-                                                            <tr>
-                                                                <th class="text-dark fw-light">#</th>
-                                                                <th class="text-dark fw-light">Course code</th>
-                                                                <th class="text-dark fw-light">Course name</th>
-                                                                <th class="text-dark fw-light">Unit</th>
-                                                                <th class="text-dark fw-light bg-dark-blue-accent bg-opacity-10">Grade</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            <?php
-                                                            $get_enrolled_courses = $pdo->prepare("SELECT enrolled_courses.*, courses.name, courses.unit FROM enrolled_courses INNER JOIN courses ON enrolled_courses.course_code = courses.code WHERE enrolled_courses.enrollment_id = ?");
-                                                            $get_enrolled_courses->execute([$enrollment['id']]);
-                                                            $i = 1;
-                                                            while ($enrolled_course = $get_enrolled_courses->fetch()) {
-                                                                $find_grade = $pdo->prepare('SELECT * FROM grades WHERE course_code = ? AND enrollment_id = ?');
-                                                                $find_grade->execute([$enrolled_course['course_code'], $enrolled_course['enrollment_id']]);
-                                                                $grade = $find_grade->fetch();
-                                                            ?>
+                                                    <div class="table-responsive-sm">
+                                                        <table class="table table-bordered">
+                                                            <thead class="text-secondary">
                                                                 <tr>
-                                                                    <td><?= $i++ ?></td>
-                                                                    <td><?= $enrolled_course['course_code'] ?></td>
-                                                                    <td><?= $enrolled_course['name'] ?></td>
-                                                                    <td><?= $enrolled_course['unit'] ?></td>
-                                                                    <td class="bg-dark-blue-accent bg-opacity-10 text-dark-blue-accent"><?= $grade ? $grade['grade'] : 'NA' ?></td>
+                                                                    <th class="text-dark fw-light">#</th>
+                                                                    <th class="text-dark fw-light">Course code</th>
+                                                                    <th class="text-dark fw-light">Course name</th>
+                                                                    <th class="text-dark fw-light">Unit</th>
+                                                                    <th class="text-dark fw-light bg-dark-blue-accent bg-opacity-10">Grade</th>
                                                                 </tr>
-                                                            <?php
-                                                            }
-                                                            ?>
-                                                        </tbody>
-                                                    </table>
+                                                            </thead>
+                                                            <tbody>
+                                                                <?php
+                                                                $get_enrolled_courses = $pdo->prepare("SELECT enrolled_courses.*, courses.name, courses.unit FROM enrolled_courses INNER JOIN courses ON enrolled_courses.course_code = courses.code WHERE enrolled_courses.enrollment_id = ?");
+                                                                $get_enrolled_courses->execute([$enrollment['id']]);
+                                                                $i = 1;
+                                                                while ($enrolled_course = $get_enrolled_courses->fetch()) {
+                                                                    $find_grade = $pdo->prepare('SELECT * FROM grades WHERE course_code = ? AND enrollment_id = ?');
+                                                                    $find_grade->execute([$enrolled_course['course_code'], $enrolled_course['enrollment_id']]);
+                                                                    $grade = $find_grade->fetch();
+                                                                ?>
+                                                                    <tr>
+                                                                        <td><?= $i++ ?></td>
+                                                                        <td><?= $enrolled_course['course_code'] ?></td>
+                                                                        <td><?= $enrolled_course['name'] ?></td>
+                                                                        <td><?= $enrolled_course['unit'] ?></td>
+                                                                        <td class="bg-dark-blue-accent bg-opacity-10 text-dark-blue-accent"><?= $grade ? $grade['grade'] : 'NA' ?></td>
+                                                                    </tr>
+                                                                <?php
+                                                                }
+                                                                ?>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -219,19 +221,21 @@
                 // }
             })
 
-            $("#edit-modal").on("show.bs.modal",function(e){
+            $("#edit-modal").on("show.bs.modal", function(e) {
                 let btn = $(e.relatedTarget);
-                $.get('../app/get-grades.php',{id:btn.data('id')},function(res){
+                $.get('../app/get-grades.php', {
+                    id: btn.data('id')
+                }, function(res) {
                     console.log('res: ', res)
                     $("#form-content").html(res)
                 })
             })
 
-            $("#edit-modal").on("hidden.bs.modal",function(e){
+            $("#edit-modal").on("hidden.bs.modal", function(e) {
                 $("#form-content").html("")
             })
 
-            $(".input-grades").on("input",function(e){
+            $(".input-grades").on("input", function(e) {
 
             })
         })

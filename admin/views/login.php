@@ -33,11 +33,15 @@ if ($query->rowCount() == 0) {
         <div class="login-container">
             <div class="container">
                 <div class="row justify-content-center">
+                    <div class="text-center">
+                        <img src="../../assets/images/catsu.png" width="70" height="70" alt="" class="img-fluid mb-3">
+                        <p class="text-white-50"><?= $_ENV['APP_NAME'] ?></p>
+                    </div>
+                    <p class="text-center fs-3 mb-4 fw-bold text-light">Admin Login</p>
                     <div class="col-md-6">
-                        <p class="text-center text-light fs-2 mb-4 fw-bold mt-0">Catsu Chatbot Support</p>
                         <div class="card border-0 shadow p-3">
                             <div class="card-body">
-                                <p class="fw-bold">Admin Login</p>
+                                <p class="form-text">Login to manage system</p>
                                 <hr>
                                 <form action="" method="post">
                                     <?php if (isset($error['username'])) : ?>
@@ -56,7 +60,7 @@ if ($query->rowCount() == 0) {
                                         <?php endif ?>
                                     </div>
 
-                                    <button class="btn btn-dark-blue col-12" type="submit" name="login">Login</button>
+                                    <button class="btn btn-dark-blue col-12" type="submit" name="login">LOGIN</button>
                                 </form>
                             </div>
                         </div>
