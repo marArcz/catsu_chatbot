@@ -1,4 +1,16 @@
 <?php require_once '../includes/authenticated.php' ?>
+
+<?php 
+    if(isset($_GET['st'])){
+        $student_id_no = $_GET['st'];
+        $query = $pdo->prepare('SELECT * FROM students WHERE student_id_no=?');
+        $query->execute([$student_id_no]);
+        $student = $query->fetch(PDO::FETCH_ASSOC);
+    }else{
+        $student = null;
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,7 +30,21 @@
         <div class="content">
             <div class="container-fluid">
                 <div class="text-end">
-                    <a href="#insert-modal" data-bs-toggle="modal" class="btn btn-warning text-light">
+                    <!-- <a href="#insert-modal" data-bs-toggle="modal" class="btn btn-warning text-light">
+                        <div class="d-flex flex-colum gap-2 fw-medium">
+                            <i class="bi bi-plus-circle-fill"></i>
+                            <span>Insert student record</span>
+                        </div>
+                    </a> -->
+                    <?php if ($student) : ?>
+                        <a href="../app/delete_student.php?id=<?= $student['id'] ?>" class="btn btn-danger text-light">
+                            <div class="d-flex flex-colum gap-2 fw-medium">
+                                <i class="bi bi-trash-fill"></i>
+                                <span>Delete Record</span>
+                            </div>
+                        </a>
+                    <?php endif ?>
+                    <a href="add_student.php" class="btn btn-primary text-light">
                         <div class="d-flex flex-colum gap-2 fw-medium">
                             <i class="bi bi-plus-circle-fill"></i>
                             <span>Insert student record</span>
@@ -62,10 +88,7 @@
                         <div class="">
                             <?php
                             if (isset($_GET['st'])) {
-                                $student_id_no = $_GET['st'];
-                                $query = $pdo->prepare('SELECT * FROM students WHERE student_id_no=?');
-                                $query->execute([$student_id_no]);
-                                $student = $query->fetch(PDO::FETCH_ASSOC);
+                               
                             ?>
                                 <form action="" method="post">
                                     <div class="row mb-3">
@@ -113,6 +136,7 @@
                             </div>
                             <div class="d-flex align-items-center ">
                                 <?php if (isset($_GET['st']) && $student) : ?>
+
                                     <a href="add_new_enrollment.php?st=<?= $student_id_no ?? '' ?>" class="btn btn-dark-blue ">
                                         <i class="bi bi-plus"></i>
                                         <span>

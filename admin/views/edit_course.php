@@ -25,7 +25,7 @@
 </head>
 
 <body class="bg-light">
-    <?php $current_page = 'responses' ?>
+    <?php $current_page = 'courses' ?>
     <?php require_once '../includes/sidebar.php' ?>
     <main id="main">
         <?php $header_title = 'Manage Responses'; ?>
@@ -52,7 +52,7 @@
                     </div>
                     <div class="d-flex gap-2 mt-5">
                         <a href="courses.php" class="btn btn-light-secondary">Cancel</a>
-                        <button type="submit" name="submit" class="btn btn-dark-blue-accent">Add course</button>
+                        <button type="submit" name="submit" class="btn btn-dark-blue-accent">Save changes</button>
                     </div>
                 </form>
             </div>

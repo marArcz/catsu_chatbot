@@ -23,8 +23,10 @@ if (isset($_POST['submit'])) {
             $suggestions = $_POST['suggestions'];
 
             foreach ($suggestions as $key => $keyword) {
-                $query = $pdo->prepare('INSERT INTO suggestions(keyword,response_id) VALUES(?,?)');
-                $query->execute([$keyword, $response_id]);
+                if(!empty($keyword)){
+                    $query = $pdo->prepare('INSERT INTO suggestions(keyword,response_id) VALUES(?,?)');
+                    $query->execute([$keyword, $response_id]);
+                }
             }
         }
     }else{ // action

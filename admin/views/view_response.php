@@ -32,6 +32,7 @@ $response = $query->fetch();
         <div class="content">
             <div class="container-fluid">
                 <div class="col-md-8 mx-auto">
+                    <input type="hidden" id="response-type" value="<?= $response['response_type_id'] ?>">
                     <input type="hidden" name="response_id" value="<?= $response['id'] ?>">
                     <div class="card shadow-sm border mb-3 create-form-card">
                         <div class="card-body p-4">
@@ -113,13 +114,6 @@ $response = $query->fetch();
                                             <div class="col">
                                                 <div class="border p-2">
                                                     <input type="text" readonly value="<?= $row['keyword'] ?>" class="form-control" name="suggestions[]">
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-2 col-sm-auto col-3">
-                                                <div class="border p-2">
-                                                    <button type="button" class="btn btn-light-danger btn-remove-suggestion">
-                                                        <i class="bi bi-x"></i>
-                                                    </button>
                                                 </div>
                                             </div>
                                         </div>

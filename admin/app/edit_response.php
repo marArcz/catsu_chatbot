@@ -22,6 +22,7 @@ if (isset($_POST['submit'])) {
         }
 
         if (isset($_POST['suggestions'])) {
+            $suggestions = $_POST['suggestions'];
             // remove old suggestions
             $query = $pdo->prepare('DELETE FROM suggestions WHERE response_id = ?');
             $query->execute([$response_id]);
