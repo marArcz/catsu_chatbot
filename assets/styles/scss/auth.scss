@@ -1,0 +1,8 @@
+$nav_h: 10vh;
+
+.auth-container{
+    min-height: calc(100vh - $nav_h);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
